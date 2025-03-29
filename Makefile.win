@@ -1,0 +1,55 @@
+# Project: TankGameProject
+# Makefile created by Embarcadero Dev-C++ 6.3
+
+CPP      = g++.exe
+CC       = gcc.exe
+WINDRES  = windres.exe
+OBJ      = obj/UtilityFunction.o obj/UIManager.o obj/Player.o obj/Monster.o obj/MapManager.o obj/main.o obj/ImageProcessing.o obj/Game.o obj/CollisionDetection.o obj/BulletProcessing.o
+LINKOBJ  = obj/UtilityFunction.o obj/UIManager.o obj/Player.o obj/Monster.o obj/MapManager.o obj/main.o obj/ImageProcessing.o obj/Game.o obj/CollisionDetection.o obj/BulletProcessing.o
+LIBS     = -L"C:/Program Files (x86)/Embarcadero/Dev-Cpp/TDM-GCC-64/lib" -L"C:/Program Files (x86)/Embarcadero/Dev-Cpp/TDM-GCC-64/x86_64-w64-mingw32/lib" -L"C:/SDL2/lib" -static-libgcc -lmingw32 -lSDL2main -lSDL2 -lSDL2_image -lSDL2_ttf -lSDL2_mixer
+INCS     = -I"C:/Program Files (x86)/Embarcadero/Dev-Cpp/TDM-GCC-64/include" -I"C:/Program Files (x86)/Embarcadero/Dev-Cpp/TDM-GCC-64/x86_64-w64-mingw32/include" -I"C:/Program Files (x86)/Embarcadero/Dev-Cpp/TDM-GCC-64/lib/gcc/x86_64-w64-mingw32/9.2.0/include"
+CXXINCS  = -I"C:/Program Files (x86)/Embarcadero/Dev-Cpp/TDM-GCC-64/include" -I"C:/Program Files (x86)/Embarcadero/Dev-Cpp/TDM-GCC-64/x86_64-w64-mingw32/include" -I"C:/Program Files (x86)/Embarcadero/Dev-Cpp/TDM-GCC-64/lib/gcc/x86_64-w64-mingw32/9.2.0/include" -I"C:/Program Files (x86)/Embarcadero/Dev-Cpp/TDM-GCC-64/lib/gcc/x86_64-w64-mingw32/9.2.0/include/c++" -I"C:/SDL2/include"
+BIN      = TankGameProject.exe
+CXXFLAGS = $(CXXINCS) 
+CFLAGS   = $(INCS) 
+DEL      = C:\Program Files (x86)\Embarcadero\Dev-Cpp\devcpp.exe INTERNAL_DEL
+
+.PHONY: all all-before all-after clean clean-custom
+
+all: all-before $(BIN) all-after
+
+clean: clean-custom
+	${DEL} $(OBJ) $(BIN)
+
+$(BIN): $(OBJ)
+	$(CPP) $(LINKOBJ) -o $(BIN) $(LIBS)
+
+obj/UtilityFunction.o: src/UtilityFunction.cpp
+	$(CPP) -c src/UtilityFunction.cpp -o obj/UtilityFunction.o $(CXXFLAGS)
+
+obj/UIManager.o: src/UIManager.cpp
+	$(CPP) -c src/UIManager.cpp -o obj/UIManager.o $(CXXFLAGS)
+
+obj/Player.o: src/Player.cpp
+	$(CPP) -c src/Player.cpp -o obj/Player.o $(CXXFLAGS)
+
+obj/Monster.o: src/Monster.cpp
+	$(CPP) -c src/Monster.cpp -o obj/Monster.o $(CXXFLAGS)
+
+obj/MapManager.o: src/MapManager.cpp
+	$(CPP) -c src/MapManager.cpp -o obj/MapManager.o $(CXXFLAGS)
+
+obj/main.o: src/main.cpp
+	$(CPP) -c src/main.cpp -o obj/main.o $(CXXFLAGS)
+
+obj/ImageProcessing.o: src/ImageProcessing.cpp
+	$(CPP) -c src/ImageProcessing.cpp -o obj/ImageProcessing.o $(CXXFLAGS)
+
+obj/Game.o: src/Game.cpp
+	$(CPP) -c src/Game.cpp -o obj/Game.o $(CXXFLAGS)
+
+obj/CollisionDetection.o: src/CollisionDetection.cpp
+	$(CPP) -c src/CollisionDetection.cpp -o obj/CollisionDetection.o $(CXXFLAGS)
+
+obj/BulletProcessing.o: src/BulletProcessing.cpp
+	$(CPP) -c src/BulletProcessing.cpp -o obj/BulletProcessing.o $(CXXFLAGS)
