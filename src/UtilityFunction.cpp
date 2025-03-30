@@ -29,3 +29,32 @@ bool checkTankOutOfMap(SDL_Rect a) {
 bool isMouseInside(SDL_Rect button, int mouseX, int mouseY) {
 	return (mouseX > button.x && mouseX < button.x + button.w && mouseY > button.y && mouseY < button.y + button.h);
 }
+
+////đọc file
+//int readFile(std :: string filePath) {
+//	std::ifstream file(filePath);
+//    if (!file) {
+//        std::cout << "Không thể mở file!\n";
+//        return 0; // Trả về 0 nếu file không mở được
+//    }
+//
+//    int scoreMax = 0; //khởi tạo giá trị mặc định
+//    file >> scoreMax;
+//    file.close();
+//    
+//    return scoreMax;
+//}
+//
+//void writeFile(std :: string filePath, int score) {
+//	int scoreMax = readFile(filePath);
+//    
+//    if (scoreMax < score) {
+//        std::ofstream file(filePath, std::ios::trunc); //xóa nội dung cũ
+//        if (!file) {
+//            std::cout << "Không thể mở file để ghi!\n";
+//            return;
+//        }
+//        file << score;
+//        file.close();
+//    }
+//}

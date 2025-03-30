@@ -166,38 +166,53 @@ void UIManager :: RenderEXP() {
 }
 
 void UIManager::RenderScores() {
-    // Màu chữ (trắng)
-    SDL_Color textColor = {255, 255, 255, 255};
-
-    // Tạo chuỗi hiển thị điểm số
-    std::string scoreText = "Score: " + std::to_string(player->scores);
-
-    // Tạo Surface chứa chữ
-    SDL_Surface* textSurface = TTF_RenderText_Solid(font, scoreText.c_str(), textColor);
-    if (textSurface == NULL) {
-        printf("Lỗi tạo Surface! SDL_ttf Error: %s\n", TTF_GetError());
-        TTF_CloseFont(font);
-        return;
-    }
-
-    // Tạo Texture từ Surface
-    SDL_Texture* textTexture = SDL_CreateTextureFromSurface(renderer, textSurface);
-    SDL_FreeSurface(textSurface); // Giải phóng surface
-
-    if (textTexture == NULL) {
-        printf("Lỗi tạo Texture! SDL_ttf Error: %s\n", TTF_GetError());
-        TTF_CloseFont(font);
-        return;
-    }
-
-    // Định vị trí điểm số trên màn hình (góc trên bên trái)
-    SDL_Rect textRect = {10, 10, textSurface->w, textSurface->h};
-
-    // Render điểm số lên màn hình
-    SDL_RenderCopy(renderer, textTexture, NULL, &textRect);
-
-    // Giải phóng bộ nhớ
-    SDL_DestroyTexture(textTexture);
+	// Màu chữ (trắng)
+	SDL_Color textColor = {255, 255, 255, 255};
+	
+	// Tạo chuỗi hiển thị điểm số
+	std::string scoreText = "Score: " + std::to_string(player->scores);
+	std::string hpText = "Hp: " + std::to_string(player->hp) + "/" + std::to_string(player->maxHp);
+	std::string levelText = "Level: " + std::to_string(player->level);
+	
+	// Tạo Surface chứa chữ
+	SDL_Surface* scoreSurface = TTF_RenderText_Solid(font, scoreText.c_str(), textColor);
+	SDL_Surface* hpSurface = TTF_RenderText_Solid(font, hpText.c_str(), textColor);
+	SDL_Surface* levelSurface = TTF_RenderText_Solid(font, levelText.c_str(), textColor);
+	
+	if (!scoreSurface || !hpSurface || !levelSurface) {
+	    printf("Lỗi tạo Surface! SDL_ttf Error: %s\n", TTF_GetError());
+	    return;
+	}
+	
+	// Tạo Texture từ Surface
+	SDL_Texture* scoreTexture = SDL_CreateTextureFromSurface(renderer, scoreSurface);
+	SDL_Texture* hpTexture = SDL_CreateTextureFromSurface(renderer, hpSurface);
+	SDL_Texture* levelTexture = SDL_CreateTextureFromSurface(renderer, levelSurface);
+	
+	// Giải phóng surface
+	SDL_FreeSurface(scoreSurface); 
+	SDL_FreeSurface(hpSurface);
+	SDL_FreeSurface(levelSurface);
+	
+	if (!scoreTexture || !hpTexture || !levelTexture) {
+	    printf("Lỗi tạo Texture! SDL_ttf Error: %s\n", TTF_GetError());
+	    return;
+	}
+	
+	// Định vị trí trên màn hình (góc trên bên trái)
+	SDL_Rect scoreRect = {10, 10, scoreSurface->w/2, scoreSurface->h/2};
+	SDL_Rect hpRect = {10, 40, hpSurface->w/2, hpSurface->h/2};
+	SDL_Rect levelRect = {10, 70, levelSurface->w/2, levelSurface->h/2};
+	
+	// Vẽ text lên màn hình
+	SDL_RenderCopy(renderer, scoreTexture, NULL, &scoreRect);
+	SDL_RenderCopy(renderer, hpTexture, NULL, &hpRect);
+	SDL_RenderCopy(renderer, levelTexture, NULL, &levelRect);
+	
+	// Giải phóng Texture khi không cần nữa
+	SDL_DestroyTexture(scoreTexture);
+	SDL_DestroyTexture(hpTexture);
+	SDL_DestroyTexture(levelTexture);
 }
 
 void UIManager ::  RenderButtonPause() {
@@ -206,42 +221,64 @@ void UIManager ::  RenderButtonPause() {
 }
 
 void UIManager :: RenderGameOver() {
-	
-	SDL_RenderCopy(renderer, gameOver, NULL, NULL) ;
-	
-	 // Màu chữ (trắng)
-    SDL_Color textColor = {0, 0, 0, 255};
+	SDL_RenderCopy(renderer, gameOver, NULL, NULL);
 
+	// Màu chữ (đen)
+	SDL_Color textColor = {0, 0, 0, 255};
+	
+//	// Kiểm tra nếu file chưa tồn tại, tạo file với giá trị mặc định
+//	std::string filePath = "scoreMax.txt";
+//	if (!std::ifstream(filePath)) {
+//	    writeFile(filePath, 0);
+//	}
+//	
+//	// Ghi điểm vào file nếu cao hơn điểm tối đa
+//	writeFile(filePath, player->scores);
+//	
+//	// Đọc lại điểm cao nhất
+//	int scoreMax = readFile(filePath);
+
+	
     // Tạo chuỗi hiển thị điểm số
     std::string scoreText = "Score: " + std::to_string(player->scores);
-
+//	std::string scoreMaxText = "Score Max: " + std::to_string(scoreMax);
+	
     // Tạo Surface chứa chữ
-    SDL_Surface* textSurface = TTF_RenderText_Solid(font, scoreText.c_str(), textColor);
-    if (textSurface == NULL) {
-        printf("Lỗi tạo Surface! SDL_ttf Error: %s\n", TTF_GetError());
-        TTF_CloseFont(font);
-        return;
-    }
+    SDL_Surface* scoreSurface = TTF_RenderText_Solid(font, scoreText.c_str(), textColor);
+//    SDL_Surface* scoreMaxSurface = TTF_RenderText_Solid(font, scoreMaxText.c_str(), textColor);
+    
+//    if (!scoreSurface || !scoreMaxSurface) {
+//        printf("Lỗi tạo Surface! SDL_ttf Error: %s\n", TTF_GetError());
+//        TTF_CloseFont(font);
+//        return;
+//    }
 
     // Tạo Texture từ Surface
-    SDL_Texture* textTexture = SDL_CreateTextureFromSurface(renderer, textSurface);
-    SDL_FreeSurface(textSurface); // Giải phóng surface
-
-    if (textTexture == NULL) {
+    SDL_Texture* scoreTexture = SDL_CreateTextureFromSurface(renderer, scoreSurface);
+//    SDL_Texture* scoreMaxTexture = SDL_CreateTextureFromSurface(renderer, scoreMaxSurface);
+    
+     // Giải phóng surface
+    SDL_FreeSurface(scoreSurface); 
+//	SDL_FreeSurface(scoreMaxSurface);
+	
+    if (!scoreTexture) {
         printf("Lỗi tạo Texture! SDL_ttf Error: %s\n", TTF_GetError());
         TTF_CloseFont(font);
         return;
     }
 
-    // Định vị trí điểm số trên màn hình (góc trên bên trái)
-    SDL_Rect textRect = {470, 285, textSurface->w, textSurface->h};
-
+    // Định vị trí điểm số trên màn hình 
+    SDL_Rect scoreRect = {460, 285, scoreSurface->w, scoreSurface->h};
+//	SDL_Rect scoreMaxRect = {460, 255, scoreMaxSurface->w, scoreMaxSurface->h};
+	
     // Render điểm số lên màn hình
-    SDL_RenderCopy(renderer, textTexture, NULL, &textRect);
-
+    SDL_RenderCopy(renderer, scoreTexture, NULL, &scoreRect);
+// 	SDL_RenderCopy(renderer, scoreMaxTexture, NULL, &scoreMaxRect);
+ 	
     // Giải phóng bộ nhớ
-    SDL_DestroyTexture(textTexture);
-
+    SDL_DestroyTexture(scoreTexture);
+//	SDL_DestroyTexture(scoreMaxTexture);
+	
 	SDL_RenderCopy(renderer, pause_Quit, NULL, &btnQuitGameOver) ;
 }
 

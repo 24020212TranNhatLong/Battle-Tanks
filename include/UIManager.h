@@ -9,7 +9,7 @@
 #include "Constants.h"
 #include "Player.h"
 #include "Monster.h"
-
+#include "UtilityFunction.h"
 
 class UIManager {
 public :

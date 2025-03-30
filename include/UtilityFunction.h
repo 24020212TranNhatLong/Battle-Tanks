@@ -4,6 +4,8 @@
 #include <cmath>
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_Image.h>
+#include <fstream>
+#include <iostream> 
 
 float lerp(float a, float b, float t) ;
 
@@ -16,4 +18,8 @@ bool isMouseInside(SDL_Rect button, int mouseX, int mouseY) ;
 bool checkBulletOutOfScreen(int x, int y) ;
 
 bool checkTankOutOfMap(SDL_Rect a) ;
+
+//int readFile(std :: string filePath) ;
+//
+//void writeFile(std :: string filePath, int score) ;
 #endif
