@@ -68,4 +68,5 @@ extern std :: vector<SDL_Rect> wallMap1 ;
 extern std :: vector<SDL_Rect> wallMap2 ;
 extern std :: vector<SDL_Rect> wallMap3 ;
 
+extern bool sound ;
 #endif				
