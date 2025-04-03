@@ -1,4 +1,4 @@
-#ifndef BULLETPROCESSING_H
+﻿#ifndef BULLETPROCESSING_H
 #define BULLETPROCESSING_H
 
 #include <SDL2/SDL.h>
@@ -10,6 +10,7 @@
 #include <cmath>
 #include "Monster.h"
 #include <ctime>
+#include "Boss.h"
 
 struct Bullet {
 	int x, y, speed, dame;
@@ -33,20 +34,24 @@ struct Bullet {
 		} 
 	}
 };
-
+ 
 class BulletProcessing {
 public :
-	BulletProcessing(Player* player, Monster* MonsterOop, Mix_Music* shotMusic) ;  
+	BulletProcessing(Player* player, Monster* MonsterOop, Mix_Chunk* shotSound, Boss* boss) ;  
 	std :: vector<Bullet> bulletsPlayer ; //vector chứa đạn được bắn ra bởi người chơi
 	std :: vector<Bullet> bulletsMonster ; //vector chứa đạn được bắn ra bởi quái vật
+	std :: vector<Bullet> bulletsBoss ;
 	void ShotByPlayer(SDL_Event	event) ; //xử lí sự kiện bắn đạn
 	void UpdatePositionBulletPlayer() ; //cập nhật vị trí đạn của người chơi
 	void UpdatePositionBulletMonster() ; //cập nhật vị trí đạn của quái vật
 	void ShotByMonster() ; //xử lí sự kiện bắn đạn của quái vật
+	void ShotByBoss() ;
+	void UpdatePositionBulletBoss() ;
 	void Reset() ; //đặt lại đạn
 	Player* player ;
 	Monster* MonsterOop ;
-	Mix_Music* shotMusic ;
+	Mix_Chunk* shotSound ;
+	Boss* boss ;
 	
 };
 #endif 

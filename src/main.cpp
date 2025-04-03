@@ -1,4 +1,4 @@
-#include <iostream>
+﻿#include <iostream>
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_mixer.h>
 #include "../include/Game.h"
@@ -43,39 +43,52 @@ int main(int argc, char* argv[]) {
         return -1;
     }
     
-    Mix_VolumeMusic(40); //chỉnh âm lượng
+    int volume = 40 ;
+    Mix_VolumeMusic(volume); //chỉnh âm lượng
     
-    Mix_Music* buttonMusic = Mix_LoadMUS("sound/button.mp3");
-    if (!buttonMusic) {
-	    std::cerr << "Failed to load button music! Error: " << Mix_GetError() << std::endl;
-	} 
 	
-    Mix_Music* gameOverMusic = Mix_LoadMUS("sound/gameOver.mp3");
+    Mix_Chunk* gameOverMusic = Mix_LoadWAV("sound/gameOver.wav");
     if (!gameOverMusic) {
 	    std::cerr << "Failed to load gameOver music! Error: " << Mix_GetError() << std::endl;
 	} 
 	
-    Mix_Music* shotMusic = Mix_LoadMUS("sound/shot.mp3");
-    if (!shotMusic) {
-	    std::cerr << "Failed to load shot music! Error: " << Mix_GetError() << std::endl;
+	Mix_Chunk* shotSound = Mix_LoadWAV("sound/shot.wav");
+	if (!shotSound) {
+	    std::cerr << "Failed to load shot sound! Error: " << Mix_GetError() << std::endl;
+	}
+	
+	Mix_Chunk* buttonMusic = Mix_LoadWAV("sound/button.wav");
+    if (!buttonMusic) {
+	    std::cerr << "Failed to load button music! Error: " << Mix_GetError() << std::endl;
+	} 
+	
+    Mix_Music* backgroundMusic = Mix_LoadMUS("sound/backgroundMusic.mp3");
+    if (!backgroundMusic) {
+	    std::cerr << "Failed to load background music! Error: " << Mix_GetError() << std::endl;
 	} 
     
-    
 	SDL_Event event ;
-	Player player;
+	Item itemProcessor(renderer) ;
+	Player player(&itemProcessor);
+	player.HandleHighScore() ;
+	
 	Monster MonstersOop (&player);
-	BulletProcessing bulletProcessor(&player, &MonstersOop, shotMusic);
-	CollisionDetection collisionDetection(&player, &MonstersOop, &bulletProcessor) ;
-	ImageProcessing imageProcessor(renderer, &player, &bulletProcessor, &MonstersOop) ;	
-	UIManager UI(renderer, &player, &MonstersOop, font) ;
+	Boss boss(&player) ;
+	BulletProcessing bulletProcessor(&player, &MonstersOop, shotSound, &boss);
+	ImageProcessing imageProcessor(renderer, &player, &bulletProcessor, &MonstersOop, &boss) ;	
+	UIManager UI(renderer, &player, &MonstersOop, font, &boss) ;
+	CollisionDetection collisionDetection(&player, &MonstersOop, &bulletProcessor, &itemProcessor, &boss, &UI) ;
+
 	
 	imageProcessor.LoadTexture() ;
 	UI.loadTexture() ;
-	
-	MapManager Map(renderer) ;
-	Map.loadMap() ;
 
-	Game game(renderer, &player, &MonstersOop, buttonMusic, gameOverMusic, &bulletProcessor, &collisionDetection, &imageProcessor, &UI, &Map) ;
+	MapManager Map(renderer, &player) ;
+	Map.loadMap() ;
+	
+	itemProcessor.loadTexture() ;
+	Game game(renderer, &player, &MonstersOop, buttonMusic, gameOverMusic, backgroundMusic, &bulletProcessor,
+			 &collisionDetection, &imageProcessor, &UI, &Map, &itemProcessor, &boss) ;
 	
 	srand(time(0)) ;
 		

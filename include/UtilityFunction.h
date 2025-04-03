@@ -19,6 +19,8 @@ bool checkBulletOutOfScreen(int x, int y) ;
 
 bool checkTankOutOfMap(SDL_Rect a) ;
 
+double Distance(int x1, int y1, int x2, int y2) ;
+
 //int readFile(std :: string filePath) ;
 //
 //void writeFile(std :: string filePath, int score) ;

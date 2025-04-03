@@ -1,4 +1,4 @@
-#ifndef MONSTER_H
+﻿#ifndef MONSTER_H
 #define MONSTER_H
 
 #include "Player.h"
@@ -9,6 +9,13 @@
 #include "Constants.h" 
 
 class BulletProcessing ;
+
+enum currentMap {
+	map0,
+	map1,
+	map2,
+	map3
+};
 
 struct Monsters {
     int hp, maxHp, dame, speed;
@@ -38,19 +45,24 @@ struct Monsters {
         currentFrameWeapon = 0 ;
         lastFrameWeaponTime = 0 ;
        	if(2500 - player->level*200 > 1000) speedShot = 2500 - player->level*200 ;
-       		else speedShot = 1;
+       		else speedShot = 1000;
     }
 };
 
 class Monster {
 public:
     Player* player;
-    std::vector<Monsters> monsters;
+    std::vector<Monsters> m0monsters;
+    std::vector<Monsters> m1monsters;
+    std::vector<Monsters> m2monsters;
+    std::vector<Monsters> m3monsters;
     Monster(Player* player);
 	void spawnMonster() ; //tạo ra quái vật mới
 	void updateAngleTank() ; //cập nhật góc quay của súng
     void moveMonster(); //di chuyển quái vật
     void attackPlayer(); // Quái tấn công người chơi
+    void findSpawnPosition(int& x, int& y, std::vector<SDL_Rect>& walls, std::vector<Monsters>& monsters) ;
+    bool isValidSpawn(int x, int y, std::vector<SDL_Rect>& walls, std::vector<Monsters>& monsters) ;
 	void Reset() ; //đặt lại quái vật
 };
 
