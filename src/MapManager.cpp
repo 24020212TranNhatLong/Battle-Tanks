@@ -1,8 +1,8 @@
 #include "../include/MapManager.h"
 
 
-MapManager :: MapManager(SDL_Renderer* renderer) 
-	: renderer(renderer) 
+MapManager :: MapManager(SDL_Renderer* renderer, Player* player) 
+	: renderer(renderer), player(player) 
 }
 
 void MapManager :: loadMap() {
