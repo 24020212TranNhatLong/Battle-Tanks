@@ -28,6 +28,7 @@ public :
 	void RenderGameOver() ;
 	void RenderSetting() ;
 	void RenderWin() ;
+	void RenderSound() ;
 	void RenderNotificationBoss() ;
 	void RenderNotificationWhenCollectBox() ;
 	void HandleInput(SDL_Event event) ;	
@@ -46,6 +47,8 @@ private :
 	SDL_Texture* gameOver ;
 	SDL_Texture* win ;
 	SDL_Texture* setting ;
+	SDL_Texture* soundNone ;
+	SDL_Texture* soundOne ;
 	std :: vector<SDL_Texture*> framesHP ;
 	std :: vector<SDL_Texture*> framesEXP ;
 	Player* player;
