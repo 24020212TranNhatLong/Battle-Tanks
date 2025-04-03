@@ -1,4 +1,4 @@
-﻿#include "../include/UIManager.h"
+#include "../include/UIManager.h"
 
 
 UIManager :: UIManager(SDL_Renderer* renderer, Player* player, Monster* MonstersOop, TTF_Font* font, Boss* boss) 
@@ -48,6 +48,15 @@ void UIManager :: loadTexture() {
 	if(!setting) std :: cout << "Fail to load texture: assets/Setting/setting.png\n" << SDL_GetError() << std :: endl;
 		else std :: cout << "Loaded: assets/Setting/setting.png" << std :: endl;
 		
+		
+	soundNone = IMG_LoadTexture(renderer, "assets/Setting/soundNone.png");
+	if(!soundNone) std :: cout << "Fail to load texture: assets/Setting/soundNone.png\n" << SDL_GetError() << std :: endl;
+	else std :: cout << "Loaded: assets/Setting/soundNone.png" << std :: endl;
+	
+	soundOne = IMG_LoadTexture(renderer, "assets/Setting/soundOne.png");
+	if(!soundOne) std :: cout << "Fail to load texture: assets/Setting/soundOne.png\n" << SDL_GetError() << std :: endl;
+	else std :: cout << "Loaded: assets/Setting/soundOne.png" << std :: endl;
+	
 	for(int i=0 ; i<6 ; i++) {
 		char filePath[50] ;
 		sprintf(filePath, "assets/HP/hp%d.png", i) ;
@@ -437,5 +446,10 @@ void UIManager :: RenderWin() {
 	SDL_RenderCopy(renderer, win, NULL, NULL);
 	SDL_RenderCopy(renderer, pause_Quit, NULL, &btnQuitGameOver) ;
 }
+
+void UIManager :: RenderSound() {
+	if(sound) SDL_RenderCopy(renderer, soundOne, NULL, &btnSound) ;
+		else SDL_RenderCopy(renderer, soundNone, NULL, &btnSound) ;
+} 
 
  
