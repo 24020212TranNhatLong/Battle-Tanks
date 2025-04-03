@@ -1,4 +1,4 @@
-﻿#include "../include/BulletProcessing.h" 
+#include "../include/BulletProcessing.h" 
 BulletProcessing :: BulletProcessing(Player* player, Monster* MonsterOop, Mix_Chunk* shotSound, Boss* boss)  
 	: player(player), MonsterOop(MonsterOop), shotSound(shotSound), boss(boss)
 	{
@@ -69,6 +69,8 @@ void BulletProcessing::ShotByMonster() {
 
             // Tạo viên đạn tại đầu nòng súng
             bulletsMonster.push_back({bulletStartX, bulletStartY, monster.angleWeapon, 5 + player->level, monster.dame});
+            if(sound) Mix_VolumeChunk(shotSound, 50) ;	
+            	else Mix_VolumeChunk(shotSound, 0) ;
             Mix_PlayChannel(-1, shotSound, 0);  // Phát âm thanh trên một kênh trống
 
             monster.isShotting = true; // Đánh dấu là quái đã bắn
@@ -109,6 +111,10 @@ void BulletProcessing::ShotByBoss() {
 	
 	        // Tạo viên đạn tại đầu nòng súng
 	        bulletsBoss.push_back({bulletStartX, bulletStartY, boss->angleWeapon, boss->speedBullet, boss->dame});
+	        
+	        if(sound) Mix_VolumeChunk(shotSound, 50) ;	
+            	else Mix_VolumeChunk(shotSound, 0) ;
+            	
 	        Mix_PlayChannel(-1, shotSound, 0);  // Phát âm thanh trên một kênh trống
 			boss->isShot = true ;
 	        boss->lastTimeShot = currentTime; // Cập nhật thời điểm bắn lần cuối
