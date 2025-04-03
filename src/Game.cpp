@@ -1,4 +1,4 @@
-﻿#include "../include/Game.h"
+#include "../include/Game.h"
 
 
 Game :: Game(SDL_Renderer* renderer, Player* player, Monster* MonstersOop, 	Mix_Chunk* buttonMusic, Mix_Chunk* gameOverMusic, Mix_Music* backgroundMusic,
@@ -21,102 +21,118 @@ Game :: Game(SDL_Renderer* renderer, Player* player, Monster* MonstersOop, 	Mix_
 
 	
 void Game::HandleEvents() {
-	SDL_Event event ;
-    int mouseX, mouseY;  
+    SDL_Event event;
+    int mouseX, mouseY;
     SDL_GetMouseState(&mouseX, &mouseY);  //lấy tọa độ của chuột
 
-//	std :: cout << mouseX << " " << mouseY << std :: endl ;
-	
     while (SDL_PollEvent(&event)) {
         if (event.type == SDL_QUIT) {
             running = false;
         }
-        
+
         // Kiểm tra sự kiện nhấn chuột
-		if (event.type == SDL_MOUSEBUTTONDOWN && event.button.button == SDL_BUTTON_LEFT) {
-		    // Nếu chưa chơi
-		    if (!isPlaying) {
-		        if (isMouseInside(btnPlay, mouseX, mouseY)) {
-		            std::cout << "Play button clicked! Starting game..." << std::endl;
-		            Mix_VolumeChunk(buttonMusic, MIX_MAX_VOLUME / 2) ;
-		            Mix_PlayChannel(-1, buttonMusic, 0);
-		            isPlaying = true;
-		        } else if (isMouseInside(btnExit, mouseX, mouseY)) {
-		            std::cout << "Exit button clicked! Exiting game..." << std::endl;
-		            Mix_VolumeChunk(buttonMusic, MIX_MAX_VOLUME / 2) ;
-		            Mix_PlayChannel(-1, buttonMusic, 0);
-		            running = false;
-		        } else if (isMouseInside(btnSetting, mouseX, mouseY)) {
-		            std::cout << "Setting button clicked!" << std::endl;
-		            Mix_VolumeChunk(buttonMusic, MIX_MAX_VOLUME / 2) ;
-		            Mix_PlayChannel(-1, buttonMusic, 0);
-		            isSetting = true;
-		        }
-		    } 
-		    // Nếu đang chơi
-		    else {
-		        if (isMouseInside(btnPause, mouseX, mouseY)) {
-		        	Mix_VolumeChunk(buttonMusic, MIX_MAX_VOLUME / 2) ;
-		        	Mix_PlayChannel(-1, buttonMusic, 0);
-		            isPause = true;
-		        }
-		    }
-		
-		    // Nếu đang tạm dừng
-		    if (isPause) {
-		        if (isMouseInside(btnResume, mouseX, mouseY)) {
-		        	Mix_VolumeChunk(buttonMusic, MIX_MAX_VOLUME / 2) ;
-		        	Mix_PlayChannel(-1, buttonMusic, 0);
-		            isPause = false;
-		        } else if (isMouseInside(btnQuitPause, mouseX, mouseY)) {
-		        	Mix_VolumeChunk(buttonMusic, MIX_MAX_VOLUME / 2) ;
-		        	Mix_PlayChannel(-1, buttonMusic, 0);
-		            isPause = false;
-		            isPlaying = false;
-		            player->Reset();
-		            MonstersOop->Reset();
-		            bulletProcessor->Reset();
-		        }
-		    }
-		
-		    // Nếu đang trong Setting
-		    if (isSetting && isMouseInside(btnQuitSetting, mouseX, mouseY)) {
-		    	Mix_VolumeChunk(buttonMusic, MIX_MAX_VOLUME / 2) ;
-		    	Mix_PlayChannel(-1, buttonMusic, 0);
-		        isSetting = false;
-		    }
-		
-		    // Nếu đã thua
-		    if (isDead && isMouseInside(btnQuitGameOver, mouseX, mouseY)) {
-		    	Mix_VolumeChunk(buttonMusic, MIX_MAX_VOLUME / 2) ;
-		    	Mix_PlayChannel(-1, buttonMusic, 0);
-		        player->Reset();
-		        MonstersOop->Reset();
-		        bulletProcessor->Reset();
-		        boss->Reset() ;
-		        isPlaying = false;
-		        isDead = false;
-		    }
-		    
-		    if (isWin && isMouseInside(btnQuitGameOver, mouseX, mouseY)) {
-		    	Mix_VolumeChunk(buttonMusic, MIX_MAX_VOLUME / 2) ;
-		    	Mix_PlayChannel(-1, buttonMusic, 0);
-		        player->Reset();
-		        MonstersOop->Reset();
-		        bulletProcessor->Reset();
-		        boss->Reset() ;
-		        isPlaying = false;
-		        isWin = false;
-		    }
-		    
-		}
-		
-		if(isPlaying) {
-			imageProcessor->HandleInput(event) ;
-			bulletProcessor->ShotByPlayer(event) ;
-		}
-	}
+        if (event.type == SDL_MOUSEBUTTONDOWN && event.button.button == SDL_BUTTON_LEFT) {
+            // Nếu chưa chơi
+            if (!isPlaying) {
+                if (isMouseInside(btnPlay, mouseX, mouseY)) {
+                    std::cout << "Play button clicked! Starting game..." << std::endl;
+//                    Mix_VolumeChunk(buttonMusic, MIX_MAX_VOLUME / 2);
+                    Mix_PlayChannel(-1, buttonMusic, 0);
+                    isPlaying = true;
+                } else if (isMouseInside(btnExit, mouseX, mouseY)) {
+                    std::cout << "Exit button clicked! Exiting game..." << std::endl;
+//                    Mix_VolumeChunk(buttonMusic, MIX_MAX_VOLUME / 2);
+                    Mix_PlayChannel(-1, buttonMusic, 0);
+                    running = false;
+                } else if (isMouseInside(btnSetting, mouseX, mouseY)) {
+                    std::cout << "Setting button clicked!" << std::endl;
+//                    Mix_VolumeChunk(buttonMusic, MIX_MAX_VOLUME / 2);
+                    Mix_PlayChannel(-1, buttonMusic, 0);
+                    isSetting = true;
+                }
+            } 
+            // Nếu đang chơi
+            else {
+                if (isMouseInside(btnPause, mouseX, mouseY)) {
+//                    Mix_VolumeChunk(buttonMusic, MIX_MAX_VOLUME / 2);
+                    Mix_PlayChannel(-1, buttonMusic, 0);
+                    isPause = true;
+                }
+                if (isMouseInside(btnSound, mouseX, mouseY)) {
+                    // Bật/tắt âm thanh
+                    if (sound) {
+                        sound = false;
+                        Mix_VolumeChunk(buttonMusic, 0); // Tắt âm thanh buttonMusic
+                        Mix_VolumeChunk(gameOverMusic, 0); // Tắt âm thanh gameOverMusic
+                        Mix_VolumeMusic(0); // Tắt nhạc nền
+                    } else {
+                        sound = true;
+                        Mix_VolumeChunk(buttonMusic, 50); // Bật âm thanh buttonMusic
+                        Mix_VolumeChunk(gameOverMusic, 50); // Bật âm thanh gameOverMusic
+                        Mix_VolumeMusic(50); // Bật nhạc nền
+                    }
+                    UI->RenderSound();  // Cập nhật lại UI sau khi thay đổi trạng thái âm thanh
+                }
+            }
+
+            // Nếu đang tạm dừng
+            if (isPause) {
+                if (isMouseInside(btnResume, mouseX, mouseY)) {
+//                    Mix_VolumeChunk(buttonMusic, MIX_MAX_VOLUME / 2);
+                    Mix_PlayChannel(-1, buttonMusic, 0);
+                    isPause = false;
+                } else if (isMouseInside(btnQuitPause, mouseX, mouseY)) {
+//                    Mix_VolumeChunk(buttonMusic, MIX_MAX_VOLUME / 2);
+                    Mix_PlayChannel(-1, buttonMusic, 0);
+                    isPause = false;
+                    isPlaying = false;
+                    player->Reset();
+                    MonstersOop->Reset();
+                    bulletProcessor->Reset();
+                }
+            }
+
+            // Nếu đang trong Setting
+            if (isSetting && isMouseInside(btnQuitSetting, mouseX, mouseY)) {
+//                Mix_VolumeChunk(buttonMusic, MIX_MAX_VOLUME / 2);
+                Mix_PlayChannel(-1, buttonMusic, 0);
+                isSetting = false;
+            }
+
+            // Nếu đã thua
+            if (isDead && isMouseInside(btnQuitGameOver, mouseX, mouseY)) {
+//                Mix_VolumeChunk(buttonMusic, MIX_MAX_VOLUME / 2);
+                Mix_PlayChannel(-1, buttonMusic, 0);
+                player->Reset();
+                MonstersOop->Reset();
+                bulletProcessor->Reset();
+                boss->Reset();
+                isPlaying = false;
+                isDead = false;
+            }
+
+            // Nếu đã thắng
+            if (isWin && isMouseInside(btnQuitGameOver, mouseX, mouseY)) {
+//                Mix_VolumeChunk(buttonMusic, MIX_MAX_VOLUME / 2);
+                Mix_PlayChannel(-1, buttonMusic, 0);
+                player->Reset();
+                MonstersOop->Reset();
+                bulletProcessor->Reset();
+                boss->Reset();
+                isPlaying = false;
+                isWin = false;
+            }
+        }
+
+        // Xử lý các sự kiện trong khi chơi
+        if (isPlaying) {
+            imageProcessor->HandleInput(event);
+            bulletProcessor->ShotByPlayer(event);
+        }
+    }
 }
+
+
 
 void Game::UpdateMusic() {
     if (!isPlaying) { 
@@ -208,7 +224,7 @@ void Game::RenderGame() {
     UI->RenderEXP() ;
     UI->RenderScores() ;
     UI->RenderButtonPause() ;
-
+	UI->RenderSound() ;
     UI->RenderNotificationBoss() ;
     UI->RenderNotificationWhenCollectBox() ;
 
